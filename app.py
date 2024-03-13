@@ -98,6 +98,6 @@ def main():
 
     if user_question: 
         user_input(user_question, api_key, vectorstore, embeddings)
-
+        
 if __name__ == "__main__":
     main()

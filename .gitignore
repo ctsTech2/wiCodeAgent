@@ -19,7 +19,7 @@ build/
 /estimateExamples
 /promptbuilding.txt
 /testingQuestions.txt
-/testsript.py
+/testscript.py
 
 # Environment variables
 .env
