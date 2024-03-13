@@ -1,0 +1,32 @@
+# .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+*.pyz
+*.pyzw
+*.egg-info/
+dist/
+build/
+*.egg
+*.spec
+
+# Jupyter Notebook
+.ipynb_checkpoints
+/documents
+/estimateExamples
+/promptbuilding.txt
+/testingQuestions.txt
+/testsript.py
+
+# Environment variables
+.env
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store

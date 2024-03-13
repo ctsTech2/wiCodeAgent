@@ -1,0 +1,8 @@
+langchain
+langchain-pinecone 
+langchain-openai
+python-dotenv
+openai
+langchainhub
+streamlit
+os
