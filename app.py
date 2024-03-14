@@ -23,17 +23,6 @@ PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 PINECONE_INDEX_NAME = os.getenv('PINECONE_INDEX_NAME')
 
-# Streamlit page configuration
-st.set_page_config(page_title="Northwoods Lumber AI Chatbot", layout="wide")
-st.markdown("""
-## Luna: Your Lumber Guide 👷‍♀️🌲
-
-### How Can I Help?
-
-"I'm here to help with whatever questions you have. If you have a project in mind, provide detailed information about it: size (square footage), city or township, and any specific requirements or features you want to include. This will help me estimate the overall cost accurately. If you don't know those things yet, that's okay. Just let me know what you do know, or ask questions you have, and I can help you from there. I know a lot about lumber, building codes, and construction projects in Wisconsin. I can also help you with general questions about construction and building materials. I'm here to help you, so don't be shy!"
-
-""")
-
 def initialize_components():
     # Initialize the Pinecone vector store
     pc_api_key = os.getenv('PINECONE_API_KEY')
@@ -84,12 +73,23 @@ def get_conversational_chain(api_key):
     chain = load_qa_chain(chat_model, chain_type="stuff", prompt=prompt)
     return chain
 
-def user_input(user_question, api_key, vectorstore, embeddings):
+def user_input(user_question, api_key, vectorstore):
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 6})
     docs = retriever.invoke(user_question)
     chain = get_conversational_chain(api_key)
     response = chain({"input_documents": docs, "question": user_question}, return_only_outputs=True)
     st.write("Luna: ", response["output_text"])
+    
+# Streamlit page configuration
+st.set_page_config(page_title="Northwoods Lumber AI Chatbot", layout="wide")
+st.markdown("""
+## Luna: Your Lumber Guide 👷‍♀️🌲
+
+### How Can I Help?
+
+"I'm here to help with whatever questions you have. If you have a project in mind, provide detailed information about it: size (square footage), city or township, and any specific requirements or features you want to include. This will help me estimate the overall cost accurately. If you don't know those things yet, that's okay. Just let me know what you do know, or ask questions you have, and I can help you from there. I know a lot about lumber, building codes, and construction projects in Wisconsin. I can also help you with general questions about construction and building materials. I'm here to help you, so don't be shy!"
+
+""")
 
 def main():
     embeddings, vectorstore, api_key = initialize_components()
@@ -97,7 +97,7 @@ def main():
     user_question = st.text_input("Ask a Question about Your Project or Wisconsion Building Code", key="user_question")
 
     if user_question: 
-        user_input(user_question, api_key, vectorstore, embeddings)
+        user_input(user_question, api_key, vectorstore)
         
 if __name__ == "__main__":
     main()
