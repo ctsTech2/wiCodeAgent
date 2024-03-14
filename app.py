@@ -7,7 +7,7 @@ import langchain_pinecone
 from pinecone import Pinecone, ServerlessSpec
 from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_pinecone import PineconeVectorStore
@@ -62,14 +62,14 @@ def get_conversational_chain(api_key):
     If you ever want to tell a user to consider another source, make sure to tell them to contact Kurt, Bill, or Chelsey at Northwoods Lumber. The Phone Number is 715-866-4238, the address is 26637 Lakeland Ave N, Webster, WI 54893, and tell them we'd be happy to help. \n
     
     
-    Context:\n {context}?\n
-    Question: \n{question}\n
+    Context: {context}
+    Question: {question}
     
     
     Answer:
     """
     chat_model = ChatOpenAI(openai_api_key=api_key, model_name='gpt-4-0125-preview', temperature=0.6)
-    prompt = ChatPromptTemplate.from_template(template)
+    prompt = PromptTemplate.from_template(template)
     chain = load_qa_chain(chat_model, chain_type="stuff", prompt=prompt)
     return chain
 
@@ -95,6 +95,7 @@ def main():
     embeddings, vectorstore, api_key = initialize_components()
 
     user_question = st.text_input("Ask a Question about Your Project or Wisconsion Building Code", key="user_question")
+    question_dict = dict(question=user_question)
 
     if user_question: 
         user_input(user_question, api_key, vectorstore)
